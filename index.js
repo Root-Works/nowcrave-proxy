@@ -28,6 +28,6 @@ app.post("/recommend", async (req, res) => {
   }
 });
 
-app.listen(PORT, () => {
+app.listen(PORT, '0.0.0.0', () => {
   console.log(`✅ 프록시 서버가 http://localhost:${PORT} 에서 실행 중입니다`);
 });
