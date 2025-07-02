@@ -5,9 +5,15 @@ require("dotenv").config();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
-const TARGET_URL = process.env.TARGET_URL || "https://recommendv2-tvegrk7hbq-an.a.run.app";
 
-app.use(cors());
+if (!process.env.TARGET_URL) {
+  throw new Error("❌ .env에 TARGET_URL이 정의되어야 합니다");
+}
+const TARGET_URL = process.env.TARGET_URL;
+
+app.use(cors({
+  origin: "https://nowcrave.rootworks.co.kr"
+}));
 app.use(express.json());
 
 app.post("/recommend", async (req, res) => {
@@ -20,7 +26,7 @@ app.post("/recommend", async (req, res) => {
 
     res.status(response.status).json(response.data);
   } catch (error) {
-    console.error("🔴 프록시 에러:", error?.response?.data || error.message);
+    console.error(error);
     res.status(error?.response?.status || 500).json({
       error: "프록시 서버 오류 발생",
     });
@@ -28,5 +34,6 @@ app.post("/recommend", async (req, res) => {
 });
 
 app.listen(PORT, '0.0.0.0', () => {
-  console.log(`✅ 프록시 서버가 http://localhost:${PORT} 에서 실행 중입니다`);
+  console.log("✅ 프록시 서버 실행 중");
+  console.log(`🔗 접속 주소: http://localhost:${PORT}`);
 });
