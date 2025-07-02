@@ -15,7 +15,6 @@ app.post("/recommend", async (req, res) => {
     const response = await axios.post(TARGET_URL, req.body, {
       headers: {
         "Content-Type": "application/json",
-        Authorization: req.headers.authorization || "", // Firebase 토큰 전달
       },
     });
 
