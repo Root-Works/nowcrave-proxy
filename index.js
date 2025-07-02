@@ -35,5 +35,10 @@ app.post("/recommend", async (req, res) => {
 
 app.listen(PORT, '0.0.0.0', () => {
   console.log("✅ 프록시 서버 실행 중");
-  console.log(`🔗 접속 주소: http://localhost:${PORT}`);
+
+  if (process.env.RENDER_EXTERNAL_URL) {
+    console.log(`🔗 실제 접속 주소: ${process.env.RENDER_EXTERNAL_URL}`);
+  } else {
+    console.log(`🔗 로컬 접속 주소: http://localhost:${PORT}`);
+  }
 });
