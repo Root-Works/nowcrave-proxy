@@ -18,10 +18,17 @@ app.use(express.json());
 
 app.post("/recommend", async (req, res) => {
   try {
+    const headers = {
+      "Content-Type": "application/json",
+    };
+
+    // Authorization 헤더가 있으면 전달
+    if (req.headers.authorization) {
+      headers["Authorization"] = req.headers.authorization;
+    }
+
     const response = await axios.post(TARGET_URL, req.body, {
-      headers: {
-        "Content-Type": "application/json",
-      },
+      headers,
     });
 
     res.status(response.status).json(response.data);
