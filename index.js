@@ -18,14 +18,17 @@ app.use(express.json());
 
 app.post("/recommend", async (req, res) => {
   try {
+    const { modelType } = req.body;
+    const clientAuthHeader = req.headers.authorization;
+    const apiKey =
+      modelType === "claude"
+        ? process.env.ANTHROPIC_API_KEY
+        : process.env.OPENAI_API_KEY;
+
     const headers = {
       "Content-Type": "application/json",
+      "Authorization": clientAuthHeader || `Bearer ${apiKey}`
     };
-
-    // Authorization 헤더가 있으면 전달
-    if (req.headers.authorization) {
-      headers["Authorization"] = req.headers.authorization;
-    }
 
     const response = await axios.post(TARGET_URL, req.body, {
       headers,
