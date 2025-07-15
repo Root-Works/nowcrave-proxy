@@ -2,6 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const axios = require("axios");
 require("dotenv").config();
+const { GoogleAuth } = require("google-auth-library");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -21,18 +22,18 @@ app.post("/recommend", async (req, res) => {
     const { modelType } = req.body;
     const clientAuthHeader = req.headers.authorization;
     console.log("🔥 전달된 Authorization 헤더:", clientAuthHeader);
-    const apiKey =
-      modelType === "claude"
-        ? process.env.ANTHROPIC_API_KEY
-        : process.env.OPENAI_API_KEY;
 
-    const headers = {
-      "Content-Type": "application/json",
-      "Authorization": clientAuthHeader || `Bearer ${apiKey}`
-    };
+    const auth = new GoogleAuth({
+      keyFile: "./service-account.json",
+      scopes: "https://www.googleapis.com/auth/cloud-platform",
+    });
 
-    const response = await axios.post(TARGET_URL, req.body, {
-      headers,
+    const client = await auth.getIdTokenClient(TARGET_URL);
+
+    const response = await client.request({
+      url: TARGET_URL,
+      method: "POST",
+      data: req.body,
     });
 
     res.status(response.status).json(response.data);
