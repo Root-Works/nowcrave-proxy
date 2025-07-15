@@ -24,7 +24,7 @@ app.post("/recommend", async (req, res) => {
     console.log("🔥 전달된 Authorization 헤더:", clientAuthHeader);
 
     const auth = new GoogleAuth({
-      keyFile: "./service-account.json",
+      credentials: JSON.parse(process.env.GOOGLE_APPLICATION_CREDENTIALS_JSON),
       scopes: "https://www.googleapis.com/auth/cloud-platform",
     });
 
