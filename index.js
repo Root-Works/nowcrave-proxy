@@ -20,8 +20,6 @@ app.use(express.json());
 app.post("/recommend", async (req, res) => {
   try {
     const { modelType } = req.body;
-    const clientAuthHeader = req.headers.authorization;
-    console.log("🔥 전달된 Authorization 헤더:", clientAuthHeader);
 
     const auth = new GoogleAuth({
       credentials: JSON.parse(process.env.GOOGLE_APPLICATION_CREDENTIALS_JSON),
@@ -33,6 +31,9 @@ app.post("/recommend", async (req, res) => {
       url: TARGET_URL,
       method: "POST",
       data: req.body,
+      headers: {
+        'Content-Type': 'application/json'
+      }
     });
 
     res.status(response.status).json(response.data);
