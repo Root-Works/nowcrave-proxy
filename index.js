@@ -20,6 +20,7 @@ app.post("/recommend", async (req, res) => {
   try {
     const { modelType } = req.body;
     const clientAuthHeader = req.headers.authorization;
+    console.log("🔥 전달된 Authorization 헤더:", clientAuthHeader);
     const apiKey =
       modelType === "claude"
         ? process.env.ANTHROPIC_API_KEY
@@ -36,7 +37,7 @@ app.post("/recommend", async (req, res) => {
 
     res.status(response.status).json(response.data);
   } catch (error) {
-    console.error(error);
+    console.error("🔥 프록시 에러 상세:", error?.response?.data || error.message);
     res.status(error?.response?.status || 500).json({
       error: "프록시 서버 오류 발생",
     });
