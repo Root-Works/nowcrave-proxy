@@ -21,8 +21,15 @@ app.post("/recommend", async (req, res) => {
   try {
     const { modelType } = req.body;
 
+    // Fix the private_key newlines in the credentials JSON
+    let credentialsJson = process.env.GOOGLE_APPLICATION_CREDENTIALS_JSON;
+    let credentials = JSON.parse(credentialsJson);
+    if (credentials.private_key) {
+      credentials.private_key = credentials.private_key.replace(/\\n/g, '\n');
+    }
+
     const auth = new GoogleAuth({
-      credentials: JSON.parse(process.env.GOOGLE_APPLICATION_CREDENTIALS_JSON),
+      credentials: credentials,
     });
 
     const client = await auth.getIdTokenClient(TARGET_URL);
