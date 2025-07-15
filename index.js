@@ -32,7 +32,8 @@ app.post("/recommend", async (req, res) => {
       credentials: credentials,
     });
 
-    const client = await auth.getIdTokenClient(TARGET_URL);
+    const client = await auth.getIdTokenClient("https://recommendv2-tvegrk7hbq-an.a.run.app");
+    console.log("✅ ID Token Client initialized for:", TARGET_URL);
 
     const response = await client.request({
       url: TARGET_URL,
