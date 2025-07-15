@@ -38,7 +38,12 @@ app.post("/recommend", async (req, res) => {
 
     res.status(response.status).json(response.data);
   } catch (error) {
-    console.error("🔥 프록시 에러 상세:", error?.response?.data || error.message);
+    console.error("🔥 프록시 에러 상세:", {
+      message: error.message,
+      response: error.response?.data,
+      status: error.response?.status,
+      stack: error.stack
+    });
     res.status(error?.response?.status || 500).json({
       error: "프록시 서버 오류 발생",
     });
