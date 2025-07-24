@@ -20,6 +20,9 @@ app.use(express.json());
 app.post("/recommend", async (req, res) => {
   try {
     const { modelType } = req.body;
+    if (modelType === "gpt") {
+      req.body.modelType = "gpt4nano";
+    }
 
     // Fix the private_key newlines in the credentials JSON
     let credentialsJson = process.env.GOOGLE_APPLICATION_CREDENTIALS_JSON;
